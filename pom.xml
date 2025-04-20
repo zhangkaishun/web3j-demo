@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <!-- Parent configuration for Spring Boot -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.2.7.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  <groupId>org.zks</groupId>
+  <artifactId>web3j-demo</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <properties>
+    <solidity.version>0.8.20</solidity.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+  </properties>
+  <name>web3j-demo</name>
+  <url>http://maven.apache.org</url>
+
+
+  <dependencies>
+    <!-- Spring Boot dependencies -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <!-- Jackson for JSON processing -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.web3j</groupId>
+      <artifactId>core</artifactId>
+      <version>4.14.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.web3j</groupId>
+      <artifactId>codegen</artifactId>
+      <version>4.14.0</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.web3j</groupId>
+        <artifactId>web3j-maven-plugin</artifactId>
+        <version>4.14.0</version>
+        <configuration>
+          <solidityExecutable>D:\software\solc.exe</solidityExecutable>
+          <!-- 指定Java版智能合约生成的位置 -->
+          <soliditySourceFiles>
+            <!-- solidity源文件放置位置 -->
+            <directory>src/main/resources/contracts</directory>
+            <includes>
+              <!-- 只将后缀为.sol的文件包括进去 -->
+              <include>**/*.sol</include>
+            </includes>
+          </soliditySourceFiles>
+          <outputDirectory>
+            <java>src/main/java</java>
+          </outputDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
