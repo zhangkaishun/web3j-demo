@@ -22,6 +22,13 @@
 
 
   <dependencies>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>4.9.0</version> <!-- 或其他与 Web3j 兼容的版本 -->
+    </dependency>
+
+
     <!-- Spring Boot dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -41,6 +48,11 @@
       <artifactId>jackson-databind</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>2.0.57</version>
+    </dependency>
 
     <dependency>
       <groupId>org.web3j</groupId>
@@ -48,43 +60,21 @@
       <version>4.14.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-
+    <!--用于根据合约生产java 类-->
     <dependency>
       <groupId>org.web3j</groupId>
       <artifactId>codegen</artifactId>
       <version>4.14.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+
+
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.web3j</groupId>
-        <artifactId>web3j-maven-plugin</artifactId>
-        <version>4.14.0</version>
-        <configuration>
-          <solidityExecutable>D:\software\solc.exe</solidityExecutable>
-          <!-- 指定Java版智能合约生成的位置 -->
-          <soliditySourceFiles>
-            <!-- solidity源文件放置位置 -->
-            <directory>src/main/resources/contracts</directory>
-            <includes>
-              <!-- 只将后缀为.sol的文件包括进去 -->
-              <include>**/*.sol</include>
-            </includes>
-          </soliditySourceFiles>
-          <outputDirectory>
-            <java>src/main/java</java>
-          </outputDirectory>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
