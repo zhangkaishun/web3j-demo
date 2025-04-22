@@ -87,6 +87,26 @@ public class EtherTest
 
     /**
      * 完全手动组装参数，发送交易
+     *
+     *  eth_sendTransaction
+     * 功能：​发送一个未签名的交易对象。
+     *
+     * 适用场景：​当私钥由 Ethereum 客户端（如 Geth 或 Parity）控制时，客户端会自动对交易进行签名。
+     *
+     * 优点：​简化了交易过程，适合快速开发和测试。
+     *
+     * 缺点：​私钥必须由客户端管理，可能不适用于所有安全要求。​
+     *
+     * 🔹 eth_sendRawTransaction
+     * 功能：​发送一个已签名的交易数据（Hex 格式）。
+     *
+     * 适用场景：​当私钥由外部工具或硬件钱包控制时，交易需要在客户端外部签名。
+     *
+     * 优点：​提供更高的安全性，私钥不暴露于客户端。
+     *
+     * 缺点：​需要手动签名交易，过程相对复杂。
+     *
+     *
      */
     @Test
     public void testTransferEther2() throws IOException, InterruptedException {
