@@ -1,2 +1,19 @@
 server:
   port: 8080  # 设置应用的端口号
+
+
+spring:
+  application:
+    name: web3j-demo
+
+  match:
+    symbols:
+      BTCGCN:
+        coinScale: 8
+        baseCoinScale: 8
+      ETHGCN:
+        coinScale: 8
+        baseCoinScale: 8
+      FOFTGCN:
+        coinScale: 8
+        baseCoinScale: 8
