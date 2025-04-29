@@ -7,6 +7,8 @@ import org.zks.match.enums.OrderDirection;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
 
 @Data
@@ -78,5 +80,45 @@ public class OrderBooks {
         sellTradePlate = new TradePlate(symbol, OrderDirection.SELL);
 
         dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    }
+
+    public void cancelOrder(Order order) {
+        TreeMap<BigDecimal,MergeOrder> currentBuyLimitPrice=getCurrentLimitPrices(order.getOrderDirection());
+        MergeOrder mergeOrder = currentBuyLimitPrice.get(order.getPrice());
+        if(mergeOrder==null){
+            return;
+        }
+        Iterator<Order> iterator = mergeOrder.iterator();
+        while (iterator.hasNext()) {
+            Order next = iterator.next();
+            if(next.getOrderId().equals(order.getOrderId())){
+                iterator.remove();
+            }
+
+        }
+        if(mergeOrder.size()==0){
+            currentBuyLimitPrice.remove(order.getPrice());
+        }
+
+        if(order.getOrderDirection()==OrderDirection.BUY){
+            buyTradePlate.remove(order);
+        }else {
+            sellTradePlate.remove(order);
+        }
+
+
+
+    }
+
+    private TreeMap<BigDecimal, MergeOrder> getCurrentLimitPrices(OrderDirection orderDirection) {
+        if(OrderDirection.BUY.equals(orderDirection)){
+            return buyLimitPrice;
+        }
+        return sellLimitPrice;
+    }
+
+    public Iterator<Map.Entry<BigDecimal, MergeOrder>> getCurrentLimitPriceIterator(OrderDirection orderDirection) {
+        return getCurrentLimitPrices(orderDirection).entrySet().iterator();
+
     }
 }

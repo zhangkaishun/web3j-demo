@@ -2,6 +2,8 @@ package org.zks.match.model;
 
 import org.zks.match.enums.OrderDirection;
 
+import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -29,5 +31,31 @@ public class TradePlate {
         public TradePlate(String symbol, OrderDirection direction) {
             this.symbol = symbol;
             this.direction = direction;
+        }
+
+        public void remove(Order order) {
+                remove(order,order.getAmount().subtract(order.getTradedAmount()));
+
+        }
+
+        private void remove(Order order, BigDecimal amount) {
+                if (items.isEmpty()) {
+                        return;
+                }
+                if (order.getOrderDirection() != direction) {
+                        return;
+                }
+                Iterator<DepthItemVo> iterator = items.iterator();
+                while (iterator.hasNext()) {
+                        DepthItemVo next = iterator.next();
+                        if(next.getPrice().equals(order.getPrice())){
+                                next.setVolume(next.getVolume().subtract(amount));
+                                if(next.getVolume().compareTo(BigDecimal.ZERO)==0){
+                                        iterator.remove();
+                                }
+                        }
+                }
+
+
         }
 }
