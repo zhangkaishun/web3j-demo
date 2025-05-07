@@ -83,8 +83,8 @@ public class Order implements Serializable {
      * 订单是否完成
      * @return
      */
-    private boolean isCompleted(){
-        return turnover.compareTo(tradedAmount)<=0;
+    public boolean isCompleted(){
+        return amount.compareTo(tradedAmount)<=0;
     }
 
 

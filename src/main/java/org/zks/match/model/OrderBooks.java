@@ -121,4 +121,22 @@ public class OrderBooks {
         return getCurrentLimitPrices(orderDirection).entrySet().iterator();
 
     }
+
+    public void addOrder(Order order) {
+
+        TreeMap<BigDecimal, MergeOrder> currentLimitPrices = getCurrentLimitPrices(order.getOrderDirection());
+        MergeOrder mergeOrder = currentLimitPrices.get(order.getPrice());
+        if(mergeOrder==null){
+            mergeOrder = new MergeOrder();
+            currentLimitPrices.put(order.getPrice(), mergeOrder);
+        }
+        mergeOrder.add(order);
+        if(order.getOrderDirection()==OrderDirection.BUY){
+            buyTradePlate.add(order);
+        }else {
+            sellTradePlate.add(order);
+        }
+
+
+    }
 }
