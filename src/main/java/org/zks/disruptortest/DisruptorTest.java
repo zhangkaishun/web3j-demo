@@ -44,10 +44,14 @@ public class DisruptorTest {
        // disruptor.handleEventsWith(handlerA);
        // disruptor.handleEventsWith(handlerB);
 
+
         //这样设置 LongEventHandler，handlerA handlerB 并行运行
         //handleEventsWith 将 handlerA 添加到当前组中，与已有 handler 并行执行
        // longEventEventHandlerGroup.handleEventsWith(handlerA);
         //longEventEventHandlerGroup.handleEventsWith(handlerB);
+
+        //TODO 待确认顺序
+        //longEventEventHandlerGroup.handleEventsWith(handlerA).handleEventsWith(handlerB);
 
         // 发布某个sequence 这个事件 必须先让 LongEventHandler 先处理完成，然后handlerA handlerB才能并发执行
         //表示 handlerA 必须 在当前组处理完事件之后串行执行
