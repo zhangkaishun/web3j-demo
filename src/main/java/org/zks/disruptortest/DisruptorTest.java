@@ -27,10 +27,12 @@ public class DisruptorTest {
 
         // 定义事件处理器
         EventHandler<LongEvent> handlerA = (event, sequence, endOfBatch) -> {
+            Thread.sleep(5*1000);
             System.out.println("Handler A: " + event.get());
         };
 
         EventHandler<LongEvent> handlerB = (event, sequence, endOfBatch) -> {
+            //Thread.sleep(3*1000);
             System.out.println("Handler B: " + event.get());
         };
 
@@ -45,12 +47,12 @@ public class DisruptorTest {
        // disruptor.handleEventsWith(handlerB);
 
 
-        //这样设置 LongEventHandler，handlerA handlerB 并行运行
-        //handleEventsWith 将 handlerA 添加到当前组中，与已有 handler 并行执行
-       // longEventEventHandlerGroup.handleEventsWith(handlerA);
-        //longEventEventHandlerGroup.handleEventsWith(handlerB);
+        //会让调用handleEventsWith之前加入这个组的先执行，也就是LongEventHandler会先执行，然后才能执行后面的
+        // ，并行执行 handleEventsWith会创建一个组，各组之间并行处理
+        longEventEventHandlerGroup.handleEventsWith(handlerA);
+        longEventEventHandlerGroup.handleEventsWith(handlerB);
 
-        //TODO 待确认顺序
+        //先执行longEventHandler 再执行handlerA 再执行 handlerB  也就是 会让调用handleEventsWith之前加入这个组的先执行
         //longEventEventHandlerGroup.handleEventsWith(handlerA).handleEventsWith(handlerB);
 
         // 发布某个sequence 这个事件 必须先让 LongEventHandler 先处理完成，然后handlerA handlerB才能并发执行
@@ -63,12 +65,12 @@ public class DisruptorTest {
 
         //and 连接的两个 EventHandlerGroup  并行处理，并会返回一个新的 EventHandlerGroup
         // longEventHandler 与 handlerA 处理完成后，再执行 handlerB
-        EventHandlerGroup<LongEvent> and = longEventEventHandlerGroup.and(disruptor.handleEventsWith(handlerA));
-        and.then(handlerB);
+       /* EventHandlerGroup<LongEvent> and = longEventEventHandlerGroup.and(disruptor.handleEventsWith(handlerA));
+        and.then(handlerB);*/
 
         disruptor.start();
         RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
-        for(long l=0;l<1000;l++){
+        for(long l=0;l<1;l++){
             long next = ringBuffer.next();
             try{
                 ringBuffer.get(next).set(l);
@@ -98,7 +100,8 @@ class LongEventFactory implements EventFactory<LongEvent> {
 
 // 3. 定义事件处理器
 class LongEventHandler implements EventHandler<LongEvent> {
-    public void onEvent(LongEvent event, long sequence, boolean endOfBatch) {
+    public void onEvent(LongEvent event, long sequence, boolean endOfBatch) throws InterruptedException {
+        Thread.sleep(2*1000);
         System.out.println("Event: " + event.get());
     }
 }
